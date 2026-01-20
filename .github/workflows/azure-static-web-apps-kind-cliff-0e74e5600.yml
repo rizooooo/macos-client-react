@@ -71,7 +71,7 @@ jobs:
           skip_app_build: true
           
           # Point to where your manual build output went (usually 'dist' for Vite)
-          app_location: "/" 
+          app_location: "dist" 
           output_location: "dist" 
           
           github_id_token: ${{ steps.idtoken.outputs.result }}
