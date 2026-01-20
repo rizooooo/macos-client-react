@@ -18,15 +18,17 @@ jobs:
       id-token: write
       contents: read
     env:
-      VITE_API_URL: ${{ secrets.VITE_API }}
+      # We define the Swagger URL here so it's available to the generator step
       SWAGGER_URL: https://notesapi-h9hcafhychchhnb5.australiasoutheast-01.azurewebsites.net/openapi/v1.json
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
+          
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
+        
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
@@ -35,9 +37,10 @@ jobs:
             const coredemo = require('@actions/core')
             return await coredemo.getIDToken()
           result-encoding: string
-      # Install OpenAPI Generator globally
+
+      # --- 1. SETUP & GENERATE ---
       - run: npm install @openapitools/openapi-generator-cli -g
-      # Generate API client from live Swagger (no JWT required)
+      
       - name: Generate API client from live Swagger
         run: |
           openapi-generator-cli generate \
@@ -45,19 +48,33 @@ jobs:
             -g typescript-fetch \
             -o api \
             --skip-validate-spec
+
+      # --- 2. MANUAL BUILD (The Fix) ---
+      - name: Install Project Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+        env:
+          # This forces the secret into the build process so Vite can see it
+          VITE_API: ${{ secrets.VITE_API }}
+
+      # --- 3. DEPLOY ARTIFACTS ---
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_CLIFF_0E74E5600 }}
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "dist" # Built app content directory - optional
+          
+          # Tell Azure to SKIP building, because we did it manually above
+          skip_app_build: true
+          
+          # Point to where your manual build output went (usually 'dist' for Vite)
+          app_location: "/" 
+          output_location: "dist" 
+          
           github_id_token: ${{ steps.idtoken.outputs.result }}
-          ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
