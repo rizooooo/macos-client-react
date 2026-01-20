@@ -5,7 +5,6 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   Outlet,
   createFileRoute,
-  redirect,
   useNavigate,
   useParams,
 } from '@tanstack/react-router'
@@ -16,22 +15,8 @@ import React from 'react'
 
 import useApi from '@/hooks/useApi'
 
-import RichEditor from '@/components/RichEditor'
-
 export const Route = createFileRoute('/folder/$folderId')({
   component: RouteComponent,
-
-  beforeLoad: ({ context, params }) => {
-    redirect({
-      from: '/folder/$folderId/note/$noteId',
-
-      params: {
-        folderId: params.folderId,
-
-        noteId: '696996c3695136161f3844db',
-      },
-    })
-  },
 })
 
 function RouteComponent() {

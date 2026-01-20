@@ -9,10 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as FolderIndexRouteImport } from './routes/folder/index'
 import { Route as FolderFolderIdRouteImport } from './routes/folder/$folderId'
 import { Route as FolderFolderIdNoteNoteIdRouteImport } from './routes/folder/$folderId/note/$noteId'
 import { Route as FolderFolderIdNoteNoteIdDeleteIndexRouteImport } from './routes/folder/$folderId/note/$noteId.delete/index'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FolderIndexRoute = FolderIndexRouteImport.update({
+  id: '/folder/',
+  path: '/folder/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FolderFolderIdRoute = FolderFolderIdRouteImport.update({
   id: '/folder/$folderId',
   path: '/folder/$folderId',
@@ -32,45 +44,73 @@ const FolderFolderIdNoteNoteIdDeleteIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/folder/$folderId': typeof FolderFolderIdRouteWithChildren
+  '/folder': typeof FolderIndexRoute
   '/folder/$folderId/note/$noteId': typeof FolderFolderIdNoteNoteIdRouteWithChildren
   '/folder/$folderId/note/$noteId/delete': typeof FolderFolderIdNoteNoteIdDeleteIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/folder/$folderId': typeof FolderFolderIdRouteWithChildren
+  '/folder': typeof FolderIndexRoute
   '/folder/$folderId/note/$noteId': typeof FolderFolderIdNoteNoteIdRouteWithChildren
   '/folder/$folderId/note/$noteId/delete': typeof FolderFolderIdNoteNoteIdDeleteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/folder/$folderId': typeof FolderFolderIdRouteWithChildren
+  '/folder/': typeof FolderIndexRoute
   '/folder/$folderId/note/$noteId': typeof FolderFolderIdNoteNoteIdRouteWithChildren
   '/folder/$folderId/note/$noteId/delete/': typeof FolderFolderIdNoteNoteIdDeleteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/folder/$folderId'
+    | '/folder'
     | '/folder/$folderId/note/$noteId'
     | '/folder/$folderId/note/$noteId/delete'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/folder/$folderId'
+    | '/folder'
     | '/folder/$folderId/note/$noteId'
     | '/folder/$folderId/note/$noteId/delete'
   id:
     | '__root__'
+    | '/'
     | '/folder/$folderId'
+    | '/folder/'
     | '/folder/$folderId/note/$noteId'
     | '/folder/$folderId/note/$noteId/delete/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   FolderFolderIdRoute: typeof FolderFolderIdRouteWithChildren
+  FolderIndexRoute: typeof FolderIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/folder/': {
+      id: '/folder/'
+      path: '/folder'
+      fullPath: '/folder'
+      preLoaderRoute: typeof FolderIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/folder/$folderId': {
       id: '/folder/$folderId'
       path: '/folder/$folderId'
@@ -123,7 +163,9 @@ const FolderFolderIdRouteWithChildren = FolderFolderIdRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   FolderFolderIdRoute: FolderFolderIdRouteWithChildren,
+  FolderIndexRoute: FolderIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

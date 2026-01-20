@@ -25,11 +25,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         // onNavigate={setMobilePane} // Pass the setter to handle back buttons
         sidebar={
           <SidebarPane
-            // When a user selects a folder, automatically go to the 'list' view
-            onSelectFolder={(id) => {
-              console.log('Folder selected:', id)
-              //   setMobilePane('list')
-            }}
+          // When a user selects a folder, automatically go to the 'list' view
           />
         }
       >
