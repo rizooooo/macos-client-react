@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "vite build",
+    "build": "generate-live:client && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
@@ -12,7 +12,7 @@
     "check": "prettier --write . && eslint --fix",
     "update:api": "rm -rf api && npm run generate:client",
     "generate:client": "openapi-generator-cli generate -i http://localhost:5004/openapi/v1.json -g typescript-fetch -o api",
-    "generate-live:client": "openapi-generator-cli generate -i https://tripexpenseapi-ehhbc7cedafnbsdr.eastasia-01.azurewebsites.net/swagger/v1/swagger.json -g typescript-fetch -o api --skip-validate-spec"
+    "generate-live:client": "openapi-generator-cli generate -i https://notesapi-h9hcafhychchhnb5.australiasoutheast-01.azurewebsites.net/openapi/v1.json -g typescript-fetch -o api --skip-validate-spec"
   },
   "dependencies": {
     "@lexical/react": "^0.39.0",
