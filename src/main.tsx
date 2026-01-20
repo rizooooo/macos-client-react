@@ -1,17 +1,15 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import 'bootswatch/dist/brite/bootstrap.min.css'
 
 import reportWebVitals from './reportWebVitals.ts'
-import App from './routes/App.tsx'
+import App from './App.tsx'
 
 // Create a new router instance
 
@@ -45,7 +43,6 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
-        {/* <RouterProvider router={router} context={{ api }} /> */}
         <App />
       </TanStackQueryProvider.Provider>
     </StrictMode>,

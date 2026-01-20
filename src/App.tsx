@@ -1,9 +1,5 @@
-import {
-  RouterProvider,
-  createFileRoute,
-  createRouter,
-} from '@tanstack/react-router'
-import * as TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider'
 import { routeTree } from '@/routeTree.gen'
 import useApi from '@/hooks/useApi'
 

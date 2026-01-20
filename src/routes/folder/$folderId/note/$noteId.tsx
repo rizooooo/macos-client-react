@@ -1,14 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { useForm } from '@tanstack/react-form'
 
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import { Form } from 'react-bootstrap'
-
 import { ChevronLeft } from 'lucide-react'
 
-import type { Note, UpdateNoteDto, UpdateNoteRequest } from 'api'
+import type { Note, UpdateNoteDto } from 'api'
 
 import useApi from '@/hooks/useApi'
 
@@ -28,10 +26,6 @@ export const Route = createFileRoute('/folder/$folderId/note/$noteId')({
 
 function RouteComponent() {
   const { noteId, folderId } = Route.useParams()
-
-  const { noteApi } = useApi()
-
-  const queryClient = useQueryClient()
 
   const note = Route.useLoaderData()
 
@@ -80,8 +74,6 @@ function RouteComponent() {
 }
 
 function NoteEditor({ note }: { note: Note }) {
-  const queryClient = useQueryClient()
-
   const { id: noteId, folderId } = note
 
   const { noteApi } = useApi()
