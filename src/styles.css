@@ -1,0 +1,32 @@
+textarea:focus, input:focus{
+    outline: none;
+}
+
+textarea {
+   resize: none;
+}
+
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
+/* Add this to your CSS file */
+/* .list-group-item .dropdown {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.list-group-item:hover .dropdown {
+  opacity: 1;
+} */
+
+.no-caret::after {
+    display: none !important;
+}
+
+/* Add this to your styles */
